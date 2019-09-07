@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "iamfloor:block/fabric_compressor" }
+    }
+}
