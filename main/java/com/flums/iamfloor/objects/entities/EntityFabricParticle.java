@@ -8,7 +8,6 @@ import com.flums.iamfloor.registry.IAFItems;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.EndermiteEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +28,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityFabricParticle extends ProjectileItemEntity implements IRendersAsItem {
+public class EntityFabricParticle extends ProjectileItemEntity {
    private LivingEntity perlThrower;
    
    	public EntityFabricParticle(EntityType<? extends EntityFabricParticle> type, World worldIn) {

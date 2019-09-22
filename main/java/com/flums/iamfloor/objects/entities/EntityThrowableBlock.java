@@ -11,9 +11,9 @@ import com.flums.iamfloor.registry.IAFItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -32,9 +33,10 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityThrowableBlock extends ProjectileItemEntity implements IRendersAsItem{
+public class EntityThrowableBlock extends ProjectileItemEntity{
    private LivingEntity perlThrower;   
    Logger logger = Logger.getLogger(EntityThrowableBlock.class.getName());
+   public static final DirectionProperty HORIZONTAL_FACING = HorizontalBlock.HORIZONTAL_FACING;
    	public EntityThrowableBlock(EntityType<? extends EntityThrowableBlock> type, World worldIn) {
    		super(type, worldIn);
    	}
@@ -78,26 +80,65 @@ public class EntityThrowableBlock extends ProjectileItemEntity implements IRende
 	      }
 
 	      World worldIn = livingentity.getEntityWorld();
-	      if (!this.world.isRemote && result.getType() == RayTraceResult.Type.BLOCK) {
-	    	  BlockPos placeon = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
+//	      BlockState[] replaceableblocks;
+//	      for(BlockState state : replaceableblocks) {
+//	    	  if() {
+//	    		  state == pos
+//	    	  }
+//	      }
+//	      boolean isreplaceable;
+	      if (!this.world.isRemote && result.getType() == RayTraceResult.Type.BLOCK && worldIn.isAirBlock(pos)) {
+	    	  Direction Side = sideisplaceable(worldIn, pos);
 	    	  BlockState block = Blocks.TORCH.getDefaultState();
-	    	  
-			if(Block.hasSolidSide(worldIn.getBlockState(placeon), worldIn, placeon, Direction.UP)) {
+	    	  if(Side != null && Side.getAxis().isHorizontal()) {
+	    		  block = Blocks.WALL_TORCH.getDefaultState().with(HORIZONTAL_FACING, Side);	    	  
+	    	  }
+	    		  
+	    	  if(Side == Direction.DOWN) {
+	    	  }
+	    	  if(Side == Direction.EAST) {
 	    		worldIn.setBlockState(pos, block);
-	    	  	worldIn.notifyNeighbors(pos, Blocks.TORCH);
-			}			
-	    	else if(!((PlayerEntity)livingentity).abilities.isCreativeMode){
-	    	  itemdrop(worldIn);
-	    	}
-	    	this.remove();
+	    	  }
+	    	  if(Side == Direction.NORTH) {
+	    		worldIn.setBlockState(pos, block);
+	    	  }
+	    	  if(Side == Direction.WEST) {
+	    		worldIn.setBlockState(pos, block);
+	    	  }
+	    	  if(Side == Direction.SOUTH) {
+	    		worldIn.setBlockState(pos, block);
+	    	  }
+	    	  if(Side == Direction.UP) {
+		    		worldIn.setBlockState(pos, block);
+	    	  }
+	    	  if(Side == null && !((PlayerEntity)livingentity).abilities.isCreativeMode){
+	    		  itemdrop(worldIn);
+	    	  }
+	    	  this.remove();
 	      }
 	   	}
+	   
+	   
 	   
 	   public void itemdrop(World worldIn) {
 	    	  ItemStack itemstack = new ItemStack(Items.TORCH);
 	          ItemEntity item = new ItemEntity(this.world, this.posX, this.posY, this.posZ, itemstack);
 	          worldIn.addEntity(item);
 	   }
+	   
+	   
+	   
+	   public Direction sideisplaceable(World worldIn, BlockPos pos){
+		   Direction direction = null;   
+		   for( Direction Direction : Direction.values() ){
+			   BlockPos placeon = pos.offset(Direction);
+			   if(Block.hasSolidSide(worldIn.getBlockState(placeon), worldIn, placeon, Direction.getOpposite())==true) {
+				   direction = Direction.getOpposite();
+			   }
+		   }
+		   return direction;
+	   }
+	   
 	   
 	   public void tick() {
 	      LivingEntity livingentity = this.getThrower();
