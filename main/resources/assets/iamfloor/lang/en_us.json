@@ -1,5 +1,8 @@
 {
 	"item.iamfloor.fabric_particle": "Fabric Particle",
-	"block.iamfloor.fabric_compressor": "Fabric Compressor",
-	"itemGroup.IAmFloor": "I Am Floor"
+	"item.iamfloor.fabric_net": "Fabric Net",
+	"item.iamfloor.sticky_particle": "Warping Torch",
+	"block.iamfloor.fabric_stabilizer": "Fabric Stabilizer",
+	"itemGroup.IAmFloor": "I Am Floor",
+	"death.attack.unstable_fabric": "%1$s exploded in unstable fabric"
 }

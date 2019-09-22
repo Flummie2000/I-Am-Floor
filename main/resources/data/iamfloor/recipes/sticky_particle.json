@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "iamfloor:fabric_particle"
+        },
+        {
+            "item": "minecraft:torch",
+	        "count": 6
+        }
+    ],
+    "result": {
+        "item": "iamfloor:sticky_particle",
+        "count": 6
+    }
+}
